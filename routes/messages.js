@@ -13,7 +13,11 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/:ts", function (req, res, next) {
-  Message.findByPk(req.params.ts).then((result) => {
+  Message.findOne({
+    where: {
+      ts: req.params.ts,
+    },
+  }).then((result) => {
     if (result === null)
       return res
         .status(400)
