@@ -5,6 +5,8 @@ const Joi = require("joi");
 
 const Message = require("../models/message");
 
+const ws = require("../wslib");
+
 /* GET message listing. */
 router.get("/", function (req, res, next) {
   Message.findAll().then((result) => {
@@ -39,11 +41,10 @@ router.post("/", function (req, res, next) {
     ts: req.body.ts,
   };
 
-  ws.send(JSON.stringify({ message }));
-
   Message.create(message).then((result) => {
     res.send(result);
   });
+  ws.sendMessages()
 });
 
 router.put("/:ts", function (req, res, next) {
@@ -68,6 +69,7 @@ router.put("/:ts", function (req, res, next) {
         .send("The message with the given ts was not found.");
     res.status(200).send("Message updated");
   });
+  ws.sendMessages()
 });
 
 router.delete("/:ts", function (req, res, next) {
@@ -78,6 +80,7 @@ router.delete("/:ts", function (req, res, next) {
         .send("The message with the given ts was not found.");
     res.status(204).send();
   });
+  ws.sendMessages()
 });
 
 function validateMessage(message) {

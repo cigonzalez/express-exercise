@@ -45,6 +45,17 @@ const wsConnection = (server) => {
 
     return schema.validate(message);
   }
+
+  return sendMessages
+};
+
+const sendMessages = () => {
+  clients.forEach((client) => {
+    Message.findAll().then((result) => {
+      client.send(JSON.stringify(result));
+    });
+  });
 };
 
 exports.wsConnection = wsConnection;
+exports.sendMessages = sendMessages;
