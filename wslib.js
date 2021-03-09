@@ -13,13 +13,13 @@ const wsConnection = (server) => {
     sendMessages();
 
     ws.on("message", (message) => {
-      message = JSON.parse(message)
+      message = JSON.parse(message);
       const { error } = validateMessage(message);
-      
+
       if (error) {
         return console.log(error.details[0].message);
       }
-      
+
       Message.create(message).then((result) => {
         sendMessages();
       });

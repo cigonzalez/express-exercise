@@ -39,6 +39,8 @@ router.post("/", function (req, res, next) {
     ts: req.body.ts,
   };
 
+  ws.send(JSON.stringify({ message }));
+
   Message.create(message).then((result) => {
     res.send(result);
   });
